@@ -17,6 +17,18 @@ test.describe('pointer effect', () => {
     await page.mouse.up();
   });
 
+  test('adapts pointer color between light and dark themes', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'touch-only devices have no pointer effect');
+    await page.goto('/');
+    const dot = page.getByTestId('pointer-fx').locator('.pointer-dot');
+    await page.evaluate(() => document.documentElement.classList.remove('dark'));
+    const lightBg = await dot.evaluate((el) => getComputedStyle(el).backgroundColor);
+    await page.evaluate(() => document.documentElement.classList.add('dark'));
+    const darkBg = await dot.evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(lightBg).not.toBe('rgb(255, 255, 255)');
+    expect(darkBg).toBe('rgb(255, 255, 255)');
+  });
+
   test('is off under reduced motion', async ({ browser }) => {
     const ctx = await browser.newContext({ reducedMotion: 'reduce' });
     const page = await ctx.newPage();
