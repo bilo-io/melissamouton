@@ -1,4 +1,4 @@
-// Renders public/og.jpg (1200×630), the link-preview image for bilo.dev.
+// Renders public/og.jpg (1200×630), the link-preview image for melissamouton.vercel.app.
 //
 // Uses the repo's own Playwright (a devDependency):
 //   npx playwright install chromium && node scripts/og-image.mjs
@@ -13,27 +13,25 @@ import { loadSrc } from './load-src.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const dataUri = (rel, type) => `data:${type};base64,${readFileSync(path.join(root, rel)).toString('base64')}`;
-const web = dataUri('src/assets/img/hero/portrait-web.webp', 'image/webp');
-const game = dataUri('src/assets/img/hero/portrait-game.webp', 'image/webp');
+const photo = dataUri('src/assets/img/melissa.webp', 'image/webp');
 const logo = dataUri('public/logos/app-logo-dark.svg', 'image/svg+xml');
 const out = path.join(root, 'public/og.jpg');
 
-// Copy comes from src/data (profile, and the current role). Re-run when the name, headline,
-// location or current role changes.
-const [{ profile }, { experience }] = await loadSrc(root, '/src/data/cv-profile.ts', '/src/data/cv-experience.ts');
+// Copy comes from src/data/profile.ts. Re-run when the name, headline or the two halves change.
+const site = 'https://melissamouton.vercel.app';
+const [{ profile, HERO }] = await loadSrc(root, '/src/data/profile.ts');
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 // The last name gets the rainbow; any names before it sit on the line above.
 const names = profile.name.trim().split(/\s+/);
 const last = names.pop();
 const first = names.join(' ');
-const current = experience.find((e) => e.isCurrent);
 const html = /* html */ `<!doctype html>
 <html><head><meta charset="utf-8" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;800;900&family=JetBrains+Mono:wght@500&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" />
 <style>
   * { box-sizing: border-box; margin: 0; }
   html, body { width: 1200px; height: 630px; overflow: hidden; }
-  body { position: relative; background: #07070b; font-family: Inter, sans-serif; color: #fafafa; }
+  body { position: relative; background: #07070b; font-family: Manrope, sans-serif; color: #fafafa; }
   canvas { position: absolute; inset: 0; }
   .wash { position: absolute; inset: 0;
     background:
@@ -46,12 +44,15 @@ const html = /* html */ `<!doctype html>
   h1 span { display: block; }
   .rainbow { background: linear-gradient(90deg, #3b82f6, #8b5cf6 45%, #ec4899); -webkit-background-clip: text; color: transparent;
     filter: drop-shadow(0 0 22px hsl(262 90% 66% / .55)); padding-bottom: 8px; }
-  .tag { margin-top: 26px; font-size: 32px; font-weight: 600; color: #e4e4e7; }
-  .sub { margin-top: 10px; font-size: 24px; font-weight: 500; color: #a1a1aa; }
-  .chip { margin-top: 30px; align-self: flex-start; display: inline-flex; gap: 12px; align-items: center; padding: 10px 18px; border-radius: 999px;
-    border: 1px solid #27272a; background: #18181bcc; font-size: 22px; font-weight: 600; color: #e4e4e7; }
-  .dot { width: 12px; height: 12px; border-radius: 99px; background: #22c55e; box-shadow: 0 0 12px #22c55e; }
-  .face { position: absolute; right: 30px; bottom: 0; width: 600px; height: 600px; }
+  .tag { margin-top: 26px; font-size: 31px; font-weight: 700; color: #e4e4e7; line-height: 1.25; }
+  .tag .dot2 { color: #71717a; }
+  .tag .rainbow { filter: none; padding: 0; }
+  .sub { margin-top: 18px; font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 500; color: #a1a1aa; }
+  .eq { position: absolute; left: 640px; right: 0; bottom: 0; height: 330px; display: flex; align-items: flex-end; gap: 6px; padding: 0 20px; opacity: .85; }
+  .eq i { flex: 1; border-radius: 6px 6px 0 0; background: linear-gradient(to top, hsl(320 85% 62%), hsl(262 90% 66%) 60%, hsl(217 95% 60% / .6)); }
+  .face img.heart { filter: saturate(1.25) hue-rotate(-18deg) contrast(1.05) drop-shadow(0 0 28px hsl(320 85% 62% / .5)); }
+  .face img.left { filter: drop-shadow(0 0 28px hsl(217 95% 60% / .4)); }
+  .face { position: absolute; right: 8px; bottom: 0; width: 600px; height: 600px; }
   .face img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center bottom; }
   .left { clip-path: inset(0 50% 0 0); }
   .seam { position: absolute; left: calc(50% - 1.5px); top: 40px; bottom: 0; width: 3px; border-radius: 9px;
@@ -63,14 +64,14 @@ const html = /* html */ `<!doctype html>
 <body>
   <canvas id="stars" width="1200" height="630"></canvas>
   <div class="wash"></div>
-  <div class="face"><img src="${game}" /><img class="left" src="${web}" /><div class="seam"></div></div>
-  <div class="url"><img src="${logo}" alt="" />bilo.dev</div>
+  <div class="eq">${Array.from({ length: 22 }, (_, i) => `<i style="height:${28 + Math.round(Math.abs(Math.sin(i * 1.7) * 52 + Math.cos(i * 0.6) * 18))}%"></i>`).join('')}</div>
+  <div class="face"><img class="heart" src="${photo}" /><img class="left" src="${photo}" /><div class="seam"></div></div>
+  <div class="url"><img src="${logo}" alt="" />${esc(new URL(site).host)}</div>
   <div class="copy">
-    <div class="eyebrow">Web dev · Game dev</div>
+    <div class="eyebrow">${esc(profile.headline)}</div>
     <h1>${first ? `<span>${esc(first)}</span>` : ''}<span class="rainbow">${esc(last)}</span></h1>
-    <div class="tag">${esc(profile.headline)}</div>
-    <div class="sub">${esc(profile.location)}</div>
-    ${current ? `<div class="chip"><span class="dot"></span>${esc(`${current.role.title} at ${current.company.name}`)}</div>` : ''}
+    <div class="tag">${esc(HERO.trade.replace(/\.$/, ''))} <span class="dot2">·</span> <span class="rainbow">${esc(HERO.heart.replace(/\.$/, ''))}</span></div>
+    <div class="sub">${esc(profile.email)}</div>
   </div>
   <script>
     let s = 20160615;
