@@ -114,6 +114,13 @@ export const PAGES: PageMeta[] = [
   ),
 
   page({
+    route: '/brand',
+    title: titled(SITE_COPY.brandPage.title),
+    description: SITE_COPY.brandPage.description,
+    jsonLd: [breadcrumbs([SITE_COPY.brandPage.title, '/brand'])],
+  }),
+
+  page({
     route: '/projects',
     title: titled(SITE_COPY.projectsPage.title),
     description: `${projects.length} design projects by ${profile.name}: ${projects.map((p) => p.name).join(', ')}.`,

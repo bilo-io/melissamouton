@@ -50,6 +50,7 @@ export function Footer() {
               { to: '/#about', label: 'About' },
               { to: '/#experience', label: 'Experience' },
               { to: '/#contact', label: 'Contact' },
+              { to: '/brand', label: 'Brand' },
             ]}
           />
           <div>

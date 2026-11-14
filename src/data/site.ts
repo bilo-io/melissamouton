@@ -1,7 +1,11 @@
 /** Site-wide copy: the top bar, footer and the sections' headings. Page copy is in profile.ts and projects.ts. */
 export const SITE_COPY = {
   homeLabel: 'Melissa Mouton home',
-  wordmark: 'mm',
+  wordmark: 'melissamouton.co.za',
+  brandPage: {
+    title: 'Brand',
+    description: 'Brand icon and wordmark for Melissa Mouton.',
+  },
   nav: [
     { id: 'about', label: 'About' },
     { id: 'projects', label: 'Projects' },

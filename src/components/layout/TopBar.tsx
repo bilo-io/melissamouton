@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, Sparkles, X } from 'lucide-react';
 import { Button, Select, ThemeToggle, cn } from '@/vendor/midnite-ui';
 import { BACKGROUND_OPTIONS, useBackground, type BackgroundChoice } from '@/hooks/use-background';
-import { useShimmer } from '@/hooks/use-shimmer';
+import { BrandLockup } from '@/components/ui/BrandLockup';
 import { SITE_COPY } from '@/data/site';
 import { ScrollProgress } from './ScrollProgress';
 import { SECTION_ROUTES, SECTIONS } from './sections';
@@ -48,8 +48,6 @@ export function TopBar() {
   const active = useActiveSection(onHome);
   const { background, setBackground } = useBackground();
   const [open, setOpen] = useState(false);
-  const shimmerRef = useRef<HTMLSpanElement>(null);
-  useShimmer([shimmerRef], { first: [2000, 3000], gap: [20000, 35000] });
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -73,20 +71,8 @@ export function TopBar() {
       )}
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-2 px-4 sm:px-6">
-        <Link to="/" className="group mr-auto flex items-center gap-2 font-bold tracking-tight" aria-label={SITE_COPY.homeLabel}>
-          <span className="relative h-8 w-8 shrink-0 transition-transform duration-300 group-hover:rotate-[-8deg] group-hover:scale-105">
-            <img src="/logos/app-logo-light.svg" alt="" width={32} height={32} className="h-8 w-8 dark:hidden" />
-            <img src="/logos/app-logo-dark.svg" alt="" width={32} height={32} className="hidden h-8 w-8 dark:block" />
-          </span>
-          <span className="stack hidden text-lg min-[400px]:inline-grid">
-            <span className="wordmark-stroke" aria-hidden>
-              {SITE_COPY.wordmark}
-            </span>
-            <span>{SITE_COPY.wordmark}</span>
-            <span ref={shimmerRef} className="shimmer" aria-hidden>
-              {SITE_COPY.wordmark}
-            </span>
-          </span>
+        <Link to="/" className="group mr-auto flex items-center" aria-label={SITE_COPY.homeLabel}>
+          <BrandLockup variant="header" />
         </Link>
 
         <nav aria-label="Sections" className="hidden items-center md:flex">

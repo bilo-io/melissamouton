@@ -14,6 +14,7 @@ import { applyMeta } from '@/seo/apply';
 
 const ProjectsPage = lazy(() => import('@/pages/ProjectsPage'));
 const ProjectPage = lazy(() => import('@/pages/ProjectPage'));
+const BrandPage = lazy(() => import('@/pages/BrandPage'));
 
 /** New route: start at the top, unless a section hash is the target. */
 function ScrollToTop() {
@@ -76,6 +77,7 @@ export default function Root() {
               ))}
               <Route path="/projects" element={<ProjectsPage />} />
               <Route path="/projects/:id" element={<ProjectPage />} />
+              <Route path="/brand" element={<BrandPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
