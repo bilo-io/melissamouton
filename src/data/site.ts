@@ -5,6 +5,7 @@ export const SITE_COPY = {
   nav: [
     { id: 'about', label: 'About' },
     { id: 'projects', label: 'Projects' },
+    { id: 'experience', label: 'Experience' },
     { id: 'contact', label: 'Contact' },
   ],
   projects: {
@@ -16,7 +17,14 @@ export const SITE_COPY = {
     view: 'View project',
   },
   about: { eyebrow: '01 · About' },
-  contact: { eyebrow: '03 · Contact', title: ['Say', 'hi!'] },
+  experience: {
+    eyebrow: '03 · Experience',
+    title: ['Career', 'timeline'],
+    education: 'Education',
+    skills: 'Core skills',
+    languages: 'Languages',
+  },
+  contact: { eyebrow: '04 · Contact', title: ['Say', 'hi!'] },
   projectsPage: {
     eyebrow: 'Portfolio',
     title: 'Projects',

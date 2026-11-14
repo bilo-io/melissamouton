@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Hero } from '@/components/cv/Hero';
 import { About } from '@/components/cv/About';
 import { Projects } from '@/components/cv/Projects';
+import { Experience } from '@/components/cv/Experience';
 import { Contact } from '@/components/cv/Contact';
 
 /** The home page. `section` supports the /<id> routes (/about, /contact), which land on that section. */
@@ -19,6 +20,7 @@ export default function Home({ section }: { section?: string }) {
       <Hero />
       <About />
       <Projects />
+      <Experience />
       <Contact />
     </main>
   );

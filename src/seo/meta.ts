@@ -38,8 +38,8 @@ export interface PageMeta {
 }
 
 const HOME_TITLE = `${profile.name} · ${profile.headline}`;
-/** Her own summary (the about copy, without the emoji), then the two halves of the hero. */
-const HOME_DESCRIPTION = `${profile.name} is a digital designer working across web, social, campaigns, and video with international teams. ${HERO.trade} ${HERO.heart}`;
+/** Her summary and the two halves of the hero. */
+const HOME_DESCRIPTION = `${profile.name} — ${profile.headline}. Pairing UI/UX design craft with agentic frontend workflows to ship digital products faster. ${HERO.trade} ${HERO.heart}`;
 
 /** The 1200×630 card scripts/og-image.mjs renders. */
 const SITE_IMAGE: ShareImage = {

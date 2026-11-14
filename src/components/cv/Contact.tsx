@@ -1,4 +1,4 @@
-import { Mail } from 'lucide-react';
+import { ExternalLink, Mail } from 'lucide-react';
 import { GradientGlow, buttonVariants, cn } from '@/vendor/midnite-ui';
 import { profile } from '@/data/profile';
 import { SITE_COPY } from '@/data/site';
@@ -26,6 +26,14 @@ export function Contact() {
               <div className="reveal mt-8 flex flex-wrap justify-center gap-3" style={stagger(3)}>
                 <a href={`mailto:${profile.email}`} className={cn(buttonVariants({ size: 'lg' }), 'h-11 rounded-xl')}>
                   <Mail className="h-4 w-4" aria-hidden /> {profile.email}
+                </a>
+                <a
+                  href={profile.linkedin}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'h-11 rounded-xl')}
+                >
+                  {profile.linkedinLabel} <ExternalLink className="h-4 w-4" aria-hidden />
                 </a>
               </div>
             </div>

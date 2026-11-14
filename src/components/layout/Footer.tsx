@@ -48,6 +48,7 @@ export function Footer() {
             links={[
               { to: '/', label: 'Home' },
               { to: '/#about', label: 'About' },
+              { to: '/#experience', label: 'Experience' },
               { to: '/#contact', label: 'Contact' },
             ]}
           />
@@ -56,6 +57,16 @@ export function Footer() {
             <p className="mt-3 text-sm">
               <a href={`mailto:${profile.email}`} className="inline-flex items-center gap-2 text-foreground/80 transition-colors hover:text-foreground">
                 <Mail className="h-4 w-4" aria-hidden /> {profile.email}
+              </a>
+            </p>
+            <p className="mt-2 text-sm">
+              <a
+                href={profile.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 text-foreground/80 transition-colors hover:text-foreground"
+              >
+                {profile.linkedinLabel}
               </a>
             </p>
           </div>

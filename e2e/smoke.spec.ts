@@ -18,6 +18,7 @@ test('home renders her name, the hero split, about and projects', async ({ page 
   await expect(page.getByRole('slider', { name: /design and dnb dj/i })).toBeVisible();
   await expect(page.locator('#about')).toContainText('Design by trade.');
   await expect(page.locator('#about').getByRole('link', { name: profile.email })).toHaveAttribute('href', `mailto:${profile.email}`);
+  await expect(page.locator('#experience')).toContainText('The Arcadia Group');
   await expect(page.getByRole('link', { name: /explore all projects/i })).toBeVisible();
   expect(errors).toEqual([]);
 });
