@@ -16,7 +16,7 @@ type Mode = 'idle' | 'hover' | 'drag' | 'pinned';
  * Drives the hero's split seam without React renders: writes `--split` (0..1, the seam's
  * position from the left of the stage) on `host` from one rAF loop.
  *
- * - Hover (fine pointer): mirrored like the original DualPanel, so the side you point at grows.
+ * - Hover (fine pointer): mirrored like bilo.dev's DualPanel, so the side you point at grows.
  * - Drag (anywhere on the stage): moves the seam by the pointer's travel, so it never snaps.
  *   Touch drags start only after horizontal travel, so vertical scrolls pass through.
  *   A mouse drag pins the seam until the pointer leaves the hero.
@@ -28,6 +28,8 @@ export function useSplitSeam(
   hostRef: RefObject<HTMLElement | null>,
   stageRef: RefObject<HTMLElement | null>,
   handleRef: RefObject<HTMLElement | null>,
+  /** The slider's spoken value for the seam at `pct` percent from the left. */
+  valueText: (pct: number) => string,
 ) {
   useEffect(() => {
     const host = hostRef.current;
@@ -61,7 +63,7 @@ export function useSplitSeam(
       if (handle && pct !== shownValue) {
         shownValue = pct;
         handle.setAttribute('aria-valuenow', String(pct));
-        handle.setAttribute('aria-valuetext', `Web dev ${pct}%, game dev ${100 - pct}%`);
+        handle.setAttribute('aria-valuetext', valueText(pct));
       }
     };
 
@@ -242,5 +244,5 @@ export function useSplitSeam(
       handle?.removeEventListener('focus', onFocus);
       handle?.removeEventListener('blur', onBlur);
     };
-  }, [hostRef, stageRef, handleRef]);
+  }, [hostRef, stageRef, handleRef, valueText]);
 }

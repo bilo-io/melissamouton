@@ -1,15 +1,11 @@
-import { useMemo, useRef } from 'react';
-import { Quote } from 'lucide-react';
+import { useRef } from 'react';
+import { Mail } from 'lucide-react';
 import { GradientGlow } from '@/vendor/midnite-ui';
-import { profile } from '@/data/cv-profile';
-import { RECOMMENDATIONS_URL, recommendations } from '@/data/cv-achievements';
+import { HERO, profile } from '@/data/profile';
+import { SITE_COPY } from '@/data/site';
 import { RevealGroup, stagger } from '@/components/ui/Reveal';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { TechIcon } from '@/components/ui/TechIcon';
 import { useShimmer } from '@/hooks/use-shimmer';
-import { intro } from '@/data/cv-cover-letters';
-import { CoverLetterLinks } from './CoverLetterLinks';
-import { letterFacts } from './experience-timeline';
 
 /** Two sentences, one per line at every width; a shimmer alternates between them while on screen. */
 function AboutTitle() {
@@ -21,15 +17,15 @@ function AboutTitle() {
   return (
     <span ref={host} className="block text-[clamp(1.5rem,8vw,3rem)] leading-[1.12]">
       <span className="stack grid w-fit whitespace-nowrap">
-        <span>Web dev by trade.</span>
+        <span>{HERO.trade}</span>
         <span ref={trade} className="shimmer" aria-hidden>
-          Web dev by trade.
+          {HERO.trade}
         </span>
       </span>
       <span className="stack grid w-fit whitespace-nowrap">
-        <span className="heading-gradient">Game dev at heart.</span>
+        <span className="heading-gradient">{HERO.heart}</span>
         <span ref={heart} className="shimmer" aria-hidden>
-          Game dev at heart.
+          {HERO.heart}
         </span>
       </span>
     </span>
@@ -37,55 +33,41 @@ function AboutTitle() {
 }
 
 export function About() {
-  // The intro from the cover letters, with its computed figures; the letters follow it.
-  const paragraphs = useMemo(() => intro(letterFacts(new Date(), false)), []);
+  const { about } = profile;
   return (
     <section id="about" className="mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32">
-      <SectionHeading eyebrow="01 · About" title={<AboutTitle />} />
+      <SectionHeading eyebrow={SITE_COPY.about.eyebrow} title={<AboutTitle />} />
 
-      <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+      <div className="grid items-stretch gap-6 lg:grid-cols-[1.4fr_1fr]">
         <RevealGroup className="surface lift p-6 sm:p-8">
-          {paragraphs.map((p, i) => (
-            <p key={i} className="reveal mb-4 text-base leading-relaxed text-foreground/85 sm:text-lg" style={stagger(i)}>
-              {p}
-            </p>
-          ))}
-          <CoverLetterLinks at={paragraphs.length} />
-          <div className="reveal mt-8" style={stagger(paragraphs.length + 1)}>
-            <p className="mb-3 font-mono text-xs uppercase tracking-widest text-muted-foreground">
-              Core technologies
-            </p>
-            <div className="flex flex-wrap gap-3">
-              {profile.coreTech.map((code, i) => (
-                <span key={code} className="reveal" data-from="zoom" style={stagger(paragraphs.length + 2 + i)}>
-                  <TechIcon code={code} size={40} className="transition-transform duration-300 hover:-translate-y-1 hover:scale-110" />
-                </span>
-              ))}
-            </div>
-          </div>
+          <h3 className="reveal text-xl font-semibold leading-snug sm:text-2xl" style={stagger(0)}>
+            {about.title}
+          </h3>
+          <p className="reveal mt-5 text-base leading-relaxed text-foreground/85 sm:text-lg" style={stagger(1)}>
+            {about.subtitle}
+          </p>
+          <p className="reveal mt-8" style={stagger(2)}>
+            <span className="block font-mono text-xs uppercase tracking-widest text-muted-foreground">{about.contactLead}</span>
+            <a href={`mailto:${profile.email}`} className="mt-2 inline-flex items-center gap-2 text-lg font-semibold hover:underline">
+              <Mail className="h-5 w-5" aria-hidden /> {profile.email}
+            </a>
+          </p>
         </RevealGroup>
 
-        <RevealGroup className="flex flex-col gap-6">
-          {recommendations.map((r, i) => (
-            <div key={r.author} className="reveal" data-from="right" style={stagger(i + 1)}>
-              <GradientGlow trigger="hover" className="p-6 sm:p-8">
-                <figure>
-                  <Quote className="mb-4 h-7 w-7 text-muted-foreground/60" aria-hidden />
-                  <blockquote>
-                    <p className="text-lg font-medium leading-snug sm:text-xl">“{r.quote}</p>
-                    <p className="mt-3 text-sm leading-relaxed text-foreground/75">{r.rest}”</p>
-                  </blockquote>
-                  <figcaption className="mt-5 text-sm text-muted-foreground">
-                    <span className="block font-semibold text-foreground">{r.author}</span>
-                    {r.title} ·{' '}
-                    <a href={RECOMMENDATIONS_URL} target="_blank" rel="noreferrer" className="underline-offset-4 hover:text-foreground hover:underline">
-                      on LinkedIn
-                    </a>
-                  </figcaption>
-                </figure>
-              </GradientGlow>
-            </div>
-          ))}
+        <RevealGroup className="flex">
+          <div className="reveal flex-1" data-from="right">
+            <GradientGlow trigger="hover" className="flex h-full min-h-[18rem] items-end justify-center overflow-hidden px-6 pt-6">
+              <img
+                src={profile.photo}
+                alt={profile.photoAlt}
+                width={720}
+                height={720}
+                loading="lazy"
+                decoding="async"
+                className="max-h-[26rem] w-auto max-w-full object-contain"
+              />
+            </GradientGlow>
+          </div>
         </RevealGroup>
       </div>
     </section>

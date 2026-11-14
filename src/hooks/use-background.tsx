@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useMemo, useState, type ReactNo
 import type { BackgroundPattern } from '@/vendor/midnite-ui';
 import { readStored, writeStored } from '@/lib/storage';
 
-export const BACKGROUND_STORAGE_KEY = 'bilo.background';
+export const BACKGROUND_STORAGE_KEY = 'melissamouton.background';
 
 export type BackgroundChoice = BackgroundPattern;
 

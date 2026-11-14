@@ -4,10 +4,11 @@ import { Menu, Sparkles, X } from 'lucide-react';
 import { Button, Select, ThemeToggle, cn } from '@/vendor/midnite-ui';
 import { BACKGROUND_OPTIONS, useBackground, type BackgroundChoice } from '@/hooks/use-background';
 import { useShimmer } from '@/hooks/use-shimmer';
+import { SITE_COPY } from '@/data/site';
 import { ScrollProgress } from './ScrollProgress';
-import { SECTIONS, SECTION_ROUTES } from './sections';
+import { SECTION_ROUTES, SECTIONS } from './sections';
 
-/** Highlights the section currently under the top bar. */
+/** Highlights the home section currently under the top bar. */
 function useActiveSection(enabled: boolean): string | null {
   const [active, setActive] = useState<string | null>(null);
   useEffect(() => {
@@ -26,13 +27,19 @@ function useActiveSection(enabled: boolean): string | null {
   return enabled ? active : null;
 }
 
-/** On the CV a native hash link scrolls; from other pages it routes home and Home scrolls. */
-function SectionLink({
+/**
+ * One nav entry. Projects is its own page; About and Contact are sections of the home page:
+ * a native hash link there, a route home (which scrolls) from other pages.
+ */
+function NavLink({
   id,
   onHome,
+  current,
   ...rest
-}: { id: string; onHome: boolean } & Omit<React.ComponentProps<'a'>, 'href'>) {
-  return onHome ? <a href={`#${id}`} {...rest} /> : <Link to={`/#${id}`} {...rest} />;
+}: { id: string; onHome: boolean; current: boolean } & Omit<React.ComponentProps<'a'>, 'href'>) {
+  const props = { ...rest, 'aria-current': current ? ('true' as const) : undefined };
+  if (id === 'projects') return <Link to="/projects" {...props} />;
+  return onHome ? <a href={`#${id}`} {...props} /> : <Link to={`/#${id}`} {...props} />;
 }
 
 export function TopBar() {
@@ -41,7 +48,6 @@ export function TopBar() {
   const active = useActiveSection(onHome);
   const { background, setBackground } = useBackground();
   const [open, setOpen] = useState(false);
-  // First sweep 2–3 s after load (inside the first 5 s), then one every 20–35 s.
   const shimmerRef = useRef<HTMLSpanElement>(null);
   useShimmer([shimmerRef], { first: [2000, 3000], gap: [20000, 35000] });
   const [scrolled, setScrolled] = useState(false);
@@ -55,6 +61,7 @@ export function TopBar() {
 
   useEffect(() => setOpen(false), [pathname]);
 
+  const isCurrent = (id: string) => (id === 'projects' ? pathname.startsWith('/projects') : active === id);
 
   return (
     <header
@@ -66,31 +73,28 @@ export function TopBar() {
       )}
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-2 px-4 sm:px-6">
-        <Link to="/" className="group mr-auto flex items-center gap-2 font-bold tracking-tight" aria-label="bilo.dev home">
-          <span className="relative h-7 w-7 shrink-0 transition-transform duration-300 group-hover:rotate-[-8deg] group-hover:scale-105">
-            <img src="/logos/app-logo-light.svg" alt="" width={28} height={28} className="h-7 w-7 dark:hidden" />
-            <img src="/logos/app-logo-dark.svg" alt="" width={28} height={28} className="hidden h-7 w-7 dark:block" />
+        <Link to="/" className="group mr-auto flex items-center gap-2 font-bold tracking-tight" aria-label={SITE_COPY.homeLabel}>
+          <span className="relative h-8 w-8 shrink-0 transition-transform duration-300 group-hover:rotate-[-8deg] group-hover:scale-105">
+            <img src="/logos/app-logo-light.svg" alt="" width={32} height={32} className="h-8 w-8 dark:hidden" />
+            <img src="/logos/app-logo-dark.svg" alt="" width={32} height={32} className="hidden h-8 w-8 dark:block" />
           </span>
           <span className="stack hidden text-lg min-[400px]:inline-grid">
             <span className="wordmark-stroke" aria-hidden>
-              bilo.dev
+              {SITE_COPY.wordmark}
             </span>
-            <span>bilo.dev</span>
+            <span>{SITE_COPY.wordmark}</span>
             <span ref={shimmerRef} className="shimmer" aria-hidden>
-              bilo.dev
+              {SITE_COPY.wordmark}
             </span>
           </span>
         </Link>
 
-        <nav aria-label="Sections" className="hidden items-center lg:flex">
+        <nav aria-label="Sections" className="hidden items-center md:flex">
           {SECTIONS.map((s) => (
-            <SectionLink key={s.id} id={s.id} onHome={onHome} className="nav-link" aria-current={active === s.id ? 'true' : undefined}>
+            <NavLink key={s.id} id={s.id} onHome={onHome} current={isCurrent(s.id)} className="nav-link">
               {s.label}
-            </SectionLink>
+            </NavLink>
           ))}
-          <Link to="/games" className="nav-link" aria-current={pathname.startsWith('/games') ? 'true' : undefined}>
-            Games
-          </Link>
         </nav>
 
         <div className="flex items-center gap-1.5 sm:gap-2">
@@ -110,7 +114,7 @@ export function TopBar() {
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden"
+            className="md:hidden"
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
@@ -121,26 +125,20 @@ export function TopBar() {
       </div>
 
       {open ? (
-        <nav aria-label="Sections" className="mx-auto grid max-w-6xl grid-cols-2 gap-1 px-4 pb-4 sm:grid-cols-4 lg:hidden">
+        <nav aria-label="Sections" className="mx-auto grid max-w-6xl grid-cols-3 gap-1 px-4 pb-4 md:hidden">
           {SECTIONS.map((s, i) => (
-            <SectionLink
+            <NavLink
               key={s.id}
               id={s.id}
               onHome={onHome}
+              current={isCurrent(s.id)}
               onClick={() => setOpen(false)}
               className="hero-in rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground"
-              style={{ '--i': i - 5 } as React.CSSProperties}
+              style={{ '--i': i - 2 } as React.CSSProperties}
             >
               {s.label}
-            </SectionLink>
+            </NavLink>
           ))}
-          <Link
-            to="/games"
-            className="hero-in rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground"
-            style={{ '--i': 1 } as React.CSSProperties}
-          >
-            Games
-          </Link>
         </nav>
       ) : null}
 

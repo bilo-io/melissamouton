@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--
+      Per-page tags (title, description, canonical, share card, JSON-LD), all from src/seo/meta.ts:
+      scripts/prerender.mjs fills this block in each route's built HTML, and the dev server's
+      route-meta plugin (vite.config.ts) fills it per request. Keep no copy of its own here.
+    -->
+    <!-- route-meta -->
+    <title>Melissa Mouton Design</title>
+    <!-- /route-meta -->
+
+    <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta property="og:site_name" content="Melissa Mouton Design" />
+    <meta property="og:locale" content="en_GB" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300..800&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+
+    <!--
+      No-flash theme init: the same logic as Midnite UI's `themeInitScript`
+      (src/vendor/midnite-ui/theme/theme-script.ts, storage key 'midnite.theme').
+    -->
+    <script>
+      (function () {
+        try {
+          var k = 'midnite.theme';
+          var s = localStorage.getItem(k);
+          var p = s === 'light' || s === 'dark' || s === 'time' ? s : 'system';
+          var r;
+          if (p === 'system') {
+            r = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          } else if (p === 'time') {
+            var h = new Date().getHours();
+            r = h >= 8 && h < 18 ? 'light' : 'dark';
+          } else {
+            r = p;
+          }
+          var c = document.documentElement.classList;
+          if (r === 'dark') c.add('dark');
+          else c.remove('dark');
+          document.documentElement.style.colorScheme = r;
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

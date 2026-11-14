@@ -11,11 +11,11 @@ export function Eyebrow({ children }: { children: ReactNode }) {
   );
 }
 
-/** Frame for the secondary pages (games, mini apps). */
+/** Frame for the secondary pages (projects). */
 export function PageShell({
   title,
   eyebrow,
-  back = { to: '/games', label: 'Games' },
+  back = { to: '/', label: 'Home' },
   header,
   children,
 }: {

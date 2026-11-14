@@ -10,7 +10,6 @@ export const SITE_COPY = {
   projects: {
     eyebrow: '02 · Projects',
     title: ['Selected', 'work'],
-    intro: '',
     explore: 'Explore All Projects',
     featuredLabel: 'Featured projects',
     noun: 'project',
