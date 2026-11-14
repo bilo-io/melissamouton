@@ -19,6 +19,8 @@ import arcadia6 from '@/assets/projects/arcadia/arcadia-6.webp';
 import ethccInstallation from '@/assets/projects/ethcc/ethcc-installation.webp';
 import ethccBefore from '@/assets/projects/ethcc/ethcc-before.webp';
 
+import { projectCopy } from './project-copy';
+
 export interface IImage {
   src: string;
   alt: string;
@@ -39,57 +41,27 @@ export interface IProject {
 
 const shots = (name: string, srcs: string[]): IImage[] => srcs.map((src, i) => ({ src, alt: `${name}, image ${i + 1}` }));
 
-/** Copy and images carried over from melissamouton.co.za. The order is the old site's list, top to bottom. */
-export const projects: IProject[] = [
-  {
-    id: 'propscan',
-    name: 'PropScan',
-    kind: 'Digital Product & UX Design',
-    description:
-      'A digital property platform designed to simplify browsing, comparison, and decision-making for buyers and renters. I led the visual UI design and layout system, focusing on clarity, hierarchy, and usability across key screens. The result was a clean, scalable interface that balances product functionality with strong visual structure.',
-    images: shots('PropScan', [propscan1, propscan2, propscan3, propscan4, propscan5, propscan6, propscan7]),
-  },
-  {
-    id: 'arcadia',
-    name: 'Arcadia',
-    kind: 'Digital Campaigns & Social Content System',
-    description:
-      'Ongoing design of digital-first campaign and social assets for an international tech brand, spanning organic content, article headers, and promotional visuals. I created flexible templates and visual systems to maintain consistency while moving quickly across multiple channels. Work was delivered remotely in close collaboration with marketing and leadership teams.',
-    images: shots('Arcadia', [arcadia1, arcadia2, arcadia3, arcadia4, arcadia5, arcadia6]),
-  },
-  {
-    id: 'ethcc',
-    name: 'ETHCC',
-    kind: 'Large-Scale Brand Activation',
-    description:
-      'Concept and design of a cyber jungle-inspired window installation for an international technology conference in France. Working closely with the client and event marketing team, I translated the brand concept across four full-height windows while integrating multiple partner logos seamlessly. The activation created a bold, cohesive visual presence within a high-traffic event environment.',
+type Media = Pick<IProject, 'images' | 'video' | 'compare'>;
+
+/** Each project's images, by id. */
+const MEDIA: Record<(typeof projectCopy)[number]['id'], Media> = {
+  propscan: { images: shots('PropScan', [propscan1, propscan2, propscan3, propscan4, propscan5, propscan6, propscan7]) },
+  arcadia: { images: shots('Arcadia', [arcadia1, arcadia2, arcadia3, arcadia4, arcadia5, arcadia6]) },
+  ethcc: {
     images: [{ src: ethccInstallation, alt: 'ETHCC window installation' }],
     compare: {
       before: { src: ethccBefore, alt: 'ETHCC windows before the installation' },
       after: { src: ethccInstallation, alt: 'ETHCC windows with the installation' },
     },
   },
-  {
-    id: 'payfluent',
-    name: 'Payfluent',
-    kind: 'Brand Storytelling Pitch Deck',
-    description:
-      "Design of a visually driven pitch deck to communicate Payfluent's product offering and value proposition to partners and investors. The focus was on clear narrative flow, strong typography, and layout consistency to support storytelling at pace. Designed for clarity, impact, and reuse across multiple presentations.",
+  payfluent: {
     images: [],
     video: { src: '/videos/payfluent-deck.mp4', poster: '/videos/payfluent-deck.jpg', alt: 'Payfluent pitch deck, a looping preview' },
   },
-  {
-    id: 'sooki',
-    name: 'Sooki',
-    kind: 'UI System & Interface Exploration',
-    description:
-      'A UI-focused design project exploring layout, component systems, and interface clarity for a digital wallet product. I developed a cohesive visual language and reusable UI elements to support scalability and future feature growth. The project highlights structured thinking around digital systems and user-focused design.',
-    images: shots('Sooki', [sooki1, sooki2, sooki3, sooki4, sooki5]),
-  },
-];
+  sooki: { images: shots('Sooki', [sooki1, sooki2, sooki3, sooki4, sooki5]) },
+};
 
-/** The projects the home page's carousel features, by id. */
-export const FEATURED_IDS = projects.map((p) => p.id);
+export const projects: IProject[] = projectCopy.map((c) => ({ ...c, ...MEDIA[c.id] }));
 
 export const projectById = (id: string) => projects.find((p) => p.id === id);
 

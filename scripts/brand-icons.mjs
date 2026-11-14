@@ -1,4 +1,4 @@
-// Renders the raster icons from the bilo.dev logo (public/logos/app-logo-dark.svg: white disc,
+// Renders the raster icons from the mm mark (public/logos/app-logo-dark.svg: white disc,
 // black mark, the variant that reads on dark backgrounds):
 //   public/favicon.ico          16 + 32 px, PNG-in-ICO, transparent (fallback for browsers without SVG favicons)
 //   public/apple-touch-icon.png 180 px, padded on the site's dark background
